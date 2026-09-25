@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:16
+    container_name: db_bibliotecaprs
+    restart: unless-stopped #Por enquanto que estamos desenvolvendo, vamos utilizar assim, depois "always"
+    environment:
+      POSTGRES_USER: ${DB_USUARIO}         # usuário do banco, definir no arq .env_exemplo
+      POSTGRES_PASSWORD: ${DB_SENHA} # senha do banco, definir no arq .env_exemplo
+      POSTGRES_DB: ${DB_NOME}           # nome do banco, definir no arq .env_exemplo
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USARIO}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: ./api
+    container_name: api_backend
+    restart: unless-stopped #de início utilizar assim, depois "always"
+    environment:
+      DATABASE_URL: postgres://${DB_USARIO}:${DB_SENHA}@db:5432/${DB_NOME}
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy 
+
+# manter os dados do banco (mesmo após, docker compose down)
+volumes:
+  pgdata:
