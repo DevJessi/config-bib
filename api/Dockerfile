@@ -1,12 +1,15 @@
-FROM node:20
+FROM node:24
 
 WORKDIR /app
 
 COPY package*.json ./
+COPY prisma ./prisma
+
 RUN npm install
+RUN npx prisma generate
 
 COPY . .
 
 EXPOSE 4000
 
-CMD ["npm", "run", "start"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npm run start"]

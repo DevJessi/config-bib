@@ -1,8 +1,8 @@
 services:
   db:
     image: postgres:16
-    container_name: db_bibliotecaprs
-    restart: unless-stopped #Por enquanto que estamos desenvolvendo, vamos utilizar assim, depois "always"
+    container_name: db_bibliotecaprs # Nome do container e não do banco
+    restart: unless-stopped # Por enquanto que estamos desenvolvendo, vamos utilizar assim, depois "always"
     environment:
       POSTGRES_USER: ${DB_USUARIO}         # usuário do banco, definir no arq .env_exemplo
       POSTGRES_PASSWORD: ${DB_SENHA} # senha do banco, definir no arq .env_exemplo
@@ -11,8 +11,10 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      # Só vai rodar 1 vez quando for criado o volume
+      - ./databaseprs/habilitar_ext:/docker-entrypoint-initdb.d:ro # Habilita a extensão "uuid-ossp"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USARIO}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USUARIO} -d ${DB_NOME}"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -22,7 +24,7 @@ services:
     container_name: api_backend
     restart: unless-stopped #de início utilizar assim, depois "always"
     environment:
-      DATABASE_URL: postgres://${DB_USARIO}:${DB_SENHA}@db:5432/${DB_NOME}
+      DATABASE_URL: postgres://${DB_USUARIO}:${DB_SENHA}@db:5432/${DB_NOME}
       PORT: 3000
     ports:
       - "3000:3000"
