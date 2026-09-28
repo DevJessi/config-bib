@@ -62,6 +62,7 @@ model Usuario {
   id                      String        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   nome                    String        @db.VarChar(255)
   email                   String        @unique @db.VarChar(255)
+  cpfHash                 String        @unique @map("cpf_hash") @db.VarChar(64)
   senhaHash               String        @map("senha_hash") @db.VarChar(255)
   papel                   Role          @default(LEITOR)
   status                  StatusUsuario @default(ATIVO)

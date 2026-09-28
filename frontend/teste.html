@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Teste</title>
+</head>
+<body>
+
+<button type="button" onclick="mostrar('login')">Login</button>
+<button type="button" onclick="mostrar('registro')">Registrar</button>
+
+<form id="formRegistro" hidden>
+  <p>Nome: <input name="nome" required></p>
+  <p>CPF: <input name="cpf" required></p>
+  <p>Email: <input name="email" type="email" required></p>
+  <p>Senha: <input name="senha" type="password" required></p>
+  <button type="submit">Registrar</button>
+</form>
+
+<form id="formLogin" hidden>
+  <p>Email: <input name="email" type="email" required></p>
+  <p>Senha: <input name="senha" type="password" required></p>
+  <button type="submit">Entrar</button>
+</form>
+
+<p id="mensagem"></p>
+
+<script>
+  const API = 'http://localhost:3000/autenticacao';
+  const formLogin = document.getElementById('formLogin');
+  const formRegistro = document.getElementById('formRegistro');
+  const mensagem = document.getElementById('mensagem');
+
+  function mostrar(qual) {
+    formLogin.hidden = qual !== 'login';
+    formRegistro.hidden = qual !== 'registro';
+    mensagem.textContent = '';
+  }
+
+  async function enviar(rota, form) {
+    const resposta = await fetch(API + '/' + rota, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.fromEntries(new FormData(form))),
+    });
+    const dados = await resposta.json().catch(() => ({}));
+    return { ok: resposta.ok, dados };
+  }
+
+  formRegistro.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      const { ok, dados } = await enviar('cadastro', formRegistro);
+      mensagem.textContent = ok ? 'Cadastro realizado' : (dados.erro || 'Erro ao cadastrar');
+    } catch {
+      mensagem.textContent = 'Não foi possível conectar à API';
+    }
+  });
+
+  formLogin.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      const { ok } = await enviar('login', formLogin);
+      mensagem.textContent = ok ? 'login teste com sucesso' : 'login fail';
+    } catch {
+      mensagem.textContent = 'Não foi possível conectar à API';
+    }
+  });
+</script>
+
+</body>
+</html>

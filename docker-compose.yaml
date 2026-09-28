@@ -26,6 +26,8 @@ services:
     environment:
       DATABASE_URL: postgres://${DB_USUARIO}:${DB_SENHA}@db:5432/${DB_NOME}
       PORT: 3000
+      ASSINATURA_TOKEN: ${ASSINATURA_TOKEN}
+      CPF_HASH: ${CPF_HASH}
     ports:
       - "3000:3000"
     depends_on:
