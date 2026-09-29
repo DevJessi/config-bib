@@ -3,14 +3,16 @@ name: bibliotecaprs
 services:
   db:
     image: postgres:16
+    container_name: bibliotecaprs
     environment:
       POSTGRES_USER: ${PG_USUARIO}
       POSTGRES_PASSWORD: ${PG_SENHA}
       POSTGRES_DB: ${PG_NOMEBANCO}
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USUARIO} -d ${PG_NOMEBANCO}"]
       interval: 5s
       timeout: 5s
       retries: 10
