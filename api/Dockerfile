@@ -3,13 +3,12 @@ FROM node:24
 WORKDIR /app
 
 COPY package*.json ./
-COPY prisma ./prisma
 
-RUN npm install
-RUN npx prisma generate
+RUN npm ci
 
 COPY . .
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && npm run start"]
+# --watch vai servir para reiniciar o processo do node, sempre que houver alterações, será útil lá na frente
+CMD ["node", "--watch"]
