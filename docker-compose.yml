@@ -2,8 +2,8 @@ name: bibliotecaprs
 
 services:
   db:
-    image: postgres:16
-    container_name: bibliotecaprs
+    image: postgres:18
+    #container_name: bibliotecaprs
     environment:
       POSTGRES_USER: ${PG_USUARIO}
       POSTGRES_PASSWORD: ${PG_SENHA}
