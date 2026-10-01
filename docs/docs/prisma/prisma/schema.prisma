@@ -1,0 +1,176 @@
+// ----------------------//
+// Conectando ao banco de dados
+// ---------------------//
+datasource db { 
+    provider = "postgresql" 
+    url = env("DATABASE\_URL") // Caminho para o banco de dados aqui! Geralmente ele é algo parecido com isso aqui "postgresql://myuser:mypassword@localhost:5432/mydatabase" mas varia. Nesse caso aqui tamo chamando por variável o caminho.
+}
+
+// ----------------------//
+// Gerador do Cliente no prisma
+// ---------------------//
+generator client { 
+    provider = "prisma-client-js" 
+}
+
+// ----------------------//
+// ENUMS DE NEGÓCIO 
+// ---------------------//
+enum Role { 
+    LEITOR 
+    BIBLIOTECARIO 
+    ADMIN 
+}
+
+enum StatusUsuario { 
+    ATIVO 
+    BLOQUEADO_MULTA // ADR-006: Bloqueado se multa pendente &gt; R$ 20,00 
+    PENDENTE_LGPD // ADR-009: Em processo de exclusão em até 48h 
+}
+
+enum StatusExemplar { 
+    DISPONIVEL 
+    EMPRESTADO 
+    RESERVADO 
+    MANUTENCAO 
+}
+
+enum StatusEmprestimo { 
+    ATIVO 
+    DEVOLVIDO 
+    ATRASADO 
+}
+
+enum StatusReserva { 
+    ATIVA 
+    ATENDIDA 
+    CANCELADA 
+}
+
+enum StatusMulta { 
+    PENDENTE 
+    PAGA 
+    ISENTA 
+}
+
+// --------------------//
+// MODELOS / TABELAS 
+// -------------------//
+/// Usuários do sistema (Leitores e Funcionários)
+model Usuario { 
+    id   String @id @default(uuid()) 
+    nome String 
+    email String @unique 
+    senhaHash String // ADR-007: Criptografada (bcrypt) 
+    papel Role @default(LEITOR) 
+    status StatusUsuario @default(ATIVO) 
+    totalMultaPendente Decimal @default(0.00) @db.Decimal(10, 2) // ADR-006 
+    solicitouExclusaoLgpdEm DateTime? // ADR-009: Marcação para expurgo em 48h 
+    createdAt DateTime @default(now()) 
+    updatedAt DateTime @updatedAt 
+    
+    emprestimos Emprestimo[] 
+    reservas Reserva[] 
+    multas Multa[] 
+    notificacoes Notificacao[] 
+    
+    @@map("usuarios") 
+}
+
+/// Catálogo de Obras/Livros 
+model Livro { 
+    id String @id @default(uuid()) 
+    titulo String 
+    autor String 
+    isbn String @unique 
+    categoria String 
+    editora String 
+    anoPublicacao Int 
+    createdAt DateTime @default(now()) 
+    updatedAt DateTime @updatedAt 
+    
+    exemplares Exemplar[] // ADR-002: Relação 1:N com exemplares físicos 
+    reservas Reserva[] 
+    
+    @@map("livros") 
+}
+
+/// Unidades Físicas/Cópias dos Livros (ADR-002) 
+model Exemplar { 
+    id String @id @default(uuid()) 
+    codigoPatrimonio String @unique 
+    livroId String 
+    status StatusExemplar @default(DISPONIVEL) 
+    createdAt DateTime @default(now()) 
+    updatedAt DateTime @updatedAt 
+    livro Livro @relation(fields: [livroId], references: [id], onDelete: Cascade) 
+    
+    emprestimos Emprestimo[] 
+    
+    @@map("exemplares") 
+}
+
+/// Controle e Histórico de Empréstimos (ADR-001, ADR-004, ADR-005) 
+model Emprestimo { 
+    id String @id @default(uuid()) 
+    leitorId String 
+    exemplarId String 
+    dataEmprestimo DateTime @default(now()) 
+    dataPrevistaDevolucao DateTime // ADR-001: Exatamente 15 dias após o empréstimo 
+    dataDevolucaoEfetiva DateTime? 
+    status StatusEmprestimo @default(ATIVO) 
+    renovacoesQtd Int @default(0) // ADR-004: Quantidade de renovações 
+    createdAt DateTime @default(now()) 
+    updatedAt DateTime @updatedAt 
+
+    leitor Usuario @relation(fields: [leitorId], references: [id], onDelete: Cascade) 
+    exemplar Exemplar @relation(fields: [exemplarId], references: [id]) 
+    multas Multa[] 
+    
+    @@map("emprestimos") 
+}
+
+/// Fila de Reservas de Livros (ADR-004) 
+model Reserva { 
+    id String @id @default(uuid()) 
+    leitorId String 
+    livroId String 
+    dataReserva DateTime @default(now()) 
+    status StatusReserva @default(ATIVA) 
+    createdAt DateTime @default(now()) 
+    updatedAt DateTime @updatedAt 
+    
+    leitor Usuario @relation(fields: [leitorId], references: [id], onDelete: Cascade) 
+    livro Livro @relation(fields: [livroId], references: [id]) 
+    
+    @@map("reservas")
+}
+
+/// Gestão Financeira de Multas (ADR-006, ADR-008) 
+model Multa { 
+    id String @id @default(uuid()) 
+    emprestimoId String 
+    leitorId String 
+    diasAtraso Int // ADR-008: Calculado automaticamente 
+    valorTotal Decimal @db.Decimal(10, 2) 
+    status StatusMulta @default(PENDENTE) 
+    dataQuitacao DateTime? // ADR-006: Somente após quitação total libera o leitor 
+    createdAt DateTime @default(now()) 
+    updatedAt DateTime @updatedAt 
+    emprestimo Emprestimo @relation(fields: [emprestimoId], references: [id]) 
+    leitor Usuario @relation(fields: [leitorId], references: [id], onDelete: Cascade) 
+    
+    @@map("multas") 
+}
+
+/// Log de Notificações Enviadas (ADR-003) 
+model Notificacao { 
+    id String @id @default(uuid()) 
+    leitorId String 
+    tipo String // "LEMBRETE_VENCIMENTO", "ATRASO_MULTA" 
+    mensagem String 
+    enviadoEm DateTime @default(now()) 
+    leitor Usuario @relation(fields: [leitorId], references: [id], onDelete: Cascade) 
+    
+    @@map("notificacoes") 
+}
