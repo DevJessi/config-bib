@@ -1,0 +1,229 @@
+.gestao-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.gestao-title {
+  font-size: 1.75rem;
+  color: #1A1A2E;
+  margin-bottom: 0.25rem;
+}
+
+.gestao-subtitle {
+  font-size: 0.9375rem;
+  color: #6B7280;
+  margin-bottom: 2rem;
+}
+
+.gestao-toolbar {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.gestao-search-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.gestao-search-icon {
+  position: absolute;
+  left: 0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9CA9FF;
+  pointer-events: none;
+}
+
+.gestao-search-input {
+  width: 100%;
+  padding: 0.625rem 0.875rem 0.625rem 2.625rem;
+  border: 1.5px solid #E0E4FF;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  background-color: #ffffff;
+  color: #1A1A2E;
+  transition: border-color 0.15s;
+}
+
+.gestao-search-input:focus {
+  outline: none;
+  border-color: #6178FC;
+}
+
+.gestao-filter-select {
+  padding: 0.625rem 0.875rem;
+  border: 1.5px solid #E0E4FF;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  background-color: #ffffff;
+  color: #1A1A2E;
+}
+
+.gestao-btn-novo {
+  padding: 0.625rem 1.25rem;
+  background-color: #6178FC;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.15s;
+  white-space: nowrap;
+}
+
+.gestao-btn-novo:hover {
+  background-color: #274DEA;
+}
+
+.gestao-table-wrap {
+  background-color: #ffffff;
+  border: 1.5px solid #E0E4FF;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.gestao-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.gestao-table thead {
+  background-color: #F8F7FF;
+  border-bottom: 1.5px solid #E0E4FF;
+}
+
+.gestao-table th {
+  padding: 0.875rem 1.25rem;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  color: #1A1A2E;
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.gestao-table td {
+  padding: 0.875rem 1.25rem;
+  color: #1A1A2E;
+  border-bottom: 1px solid #F0F0FF;
+  vertical-align: middle;
+}
+
+.gestao-table tr:last-child td {
+  border-bottom: none;
+}
+
+.gestao-table tr:hover td {
+  background-color: #F8F7FF;
+}
+
+.td-mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8125rem;
+  color: #6B7280;
+}
+
+.td-titulo {
+  font-weight: 600;
+  color: #1A1A2E;
+}
+
+.td-autor {
+  font-size: 0.8125rem;
+  color: #6B7280;
+}
+
+.status-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.625rem;
+  border-radius: 6px;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.status-badge.ativo { background-color: #DCFCE7; color: #15803D; }
+.status-badge.vencido { background-color: #FEE2E2; color: #B91C1C; }
+.status-badge.devolvido { background-color: #F3F4F6; color: #6B7280; }
+
+.btn-devolver {
+  padding: 0.375rem 0.75rem;
+  border: 1.5px solid #BBF7D0;
+  border-radius: 6px;
+  background-color: #DCFCE7;
+  color: #15803D;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: all 0.15s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.btn-devolver:hover:not(:disabled) {
+  background-color: #BBF7D0;
+}
+
+.btn-devolver:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gestao-empty {
+  text-align: center;
+  padding: 4rem;
+  color: #9CA9FF;
+}
+
+.gestao-loading {
+  text-align: center;
+  padding: 4rem;
+  color: #9CA9FF;
+}
+
+.novo-emprestimo-form {
+  background-color: #ffffff;
+  border: 1.5px solid #E0E4FF;
+  border-radius: 14px;
+  padding: 1.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.novo-emprestimo-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #274DEA;
+  margin-bottom: 1.25rem;
+}
+
+.novo-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 0.875rem;
+  align-items: end;
+}
+
+@media (max-width: 900px) {
+  .novo-form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .gestao-table-wrap {
+    overflow-x: auto;
+  }
+}
