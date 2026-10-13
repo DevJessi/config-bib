@@ -1,0 +1,152 @@
+.reservas-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.reservas-title {
+  font-size: 1.75rem;
+  color: #1A1A2E;
+  margin-bottom: 0.25rem;
+}
+
+.reservas-subtitle {
+  font-size: 0.9375rem;
+  color: #6B7280;
+  margin-bottom: 2rem;
+}
+
+.reservas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.reserva-card {
+  background-color: #ffffff;
+  border: 1.5px solid #E0E4FF;
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  transition: box-shadow 0.15s;
+}
+
+.reserva-card:hover {
+  box-shadow: 0 4px 16px rgba(97, 120, 252, 0.1);
+}
+
+.reserva-icon-wrap {
+  background-color: #F8F7FF;
+  border-radius: 10px;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6178FC;
+  flex-shrink: 0;
+}
+
+.reserva-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.reserva-titulo {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1A1A2E;
+  margin-bottom: 0.125rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reserva-autor {
+  font-size: 0.875rem;
+  color: #6B7280;
+  margin-bottom: 0.5rem;
+}
+
+.reserva-meta {
+  display: flex;
+  gap: 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: #9CA9FF;
+  flex-wrap: wrap;
+}
+
+.reserva-actions {
+  display: flex;
+  gap: 0.625rem;
+  flex-shrink: 0;
+}
+
+.btn-cancelar-reserva {
+  padding: 0.5rem 1rem;
+  border: 1.5px solid #FECACA;
+  border-radius: 8px;
+  background-color: transparent;
+  color: #DC2626;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.btn-cancelar-reserva:hover:not(:disabled) {
+  background-color: #FEE2E2;
+}
+
+.btn-cancelar-reserva:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.reservas-empty {
+  text-align: center;
+  padding: 5rem 2rem;
+  color: #9CA9FF;
+}
+
+.reservas-empty-icon {
+  display: block;
+  margin: 0 auto 1rem;
+}
+
+.reservas-empty-text {
+  font-size: 1rem;
+  color: #6B7280;
+}
+
+.reservas-loading {
+  text-align: center;
+  padding: 4rem;
+  color: #9CA9FF;
+}
+
+.reserva-status-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.625rem;
+  border-radius: 6px;
+}
+
+.reserva-status-badge.pendente { background-color: #FEF3C7; color: #B45309; }
+.reserva-status-badge.confirmada { background-color: #DCFCE7; color: #15803D; }
+.reserva-status-badge.cancelada { background-color: #F3F4F6; color: #6B7280; }
+
+@media (max-width: 600px) {
+  .reserva-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

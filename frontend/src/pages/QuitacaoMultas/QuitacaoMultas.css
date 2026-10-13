@@ -1,0 +1,207 @@
+.quitacao-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.quitacao-title {
+  font-size: 1.75rem;
+  color: #1A1A2E;
+  margin-bottom: 0.25rem;
+}
+
+.quitacao-subtitle {
+  font-size: 0.9375rem;
+  color: #6B7280;
+  margin-bottom: 2rem;
+}
+
+.quitacao-search-bar {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+
+.quitacao-search-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.quitacao-search-icon {
+  position: absolute;
+  left: 0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9CA9FF;
+  pointer-events: none;
+}
+
+.quitacao-search-input {
+  width: 100%;
+  padding: 0.625rem 0.875rem 0.625rem 2.625rem;
+  border: 1.5px solid #E0E4FF;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  background-color: #ffffff;
+  color: #1A1A2E;
+  transition: border-color 0.15s;
+}
+
+.quitacao-search-input:focus {
+  outline: none;
+  border-color: #6178FC;
+}
+
+.quitacao-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.quitacao-card {
+  background-color: #ffffff;
+  border: 1.5px solid #E0E4FF;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.quitacao-card-header {
+  padding: 1.125rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background-color: #F8F7FF;
+  border-bottom: 1.5px solid #E0E4FF;
+}
+
+.quitacao-leitor-info h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1A1A2E;
+}
+
+.quitacao-leitor-info p {
+  font-size: 0.8125rem;
+  color: #6B7280;
+}
+
+.quitacao-multa-total {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #DC2626;
+  white-space: nowrap;
+}
+
+.quitacao-multas-detalhe {
+  padding: 1.25rem 1.5rem;
+}
+
+.quitacao-multa-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.625rem 0;
+  border-bottom: 1px solid #F0F0FF;
+  font-size: 0.875rem;
+  gap: 1rem;
+}
+
+.quitacao-multa-row:last-of-type {
+  border-bottom: none;
+}
+
+.quitacao-multa-desc {
+  color: #1A1A2E;
+  flex: 1;
+}
+
+.quitacao-multa-desc small {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: #9CA9FF;
+}
+
+.quitacao-multa-valor {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: #DC2626;
+  white-space: nowrap;
+}
+
+.quitacao-card-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1.5px solid #E0E4FF;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.btn-quitar {
+  padding: 0.5625rem 1.25rem;
+  background-color: #16A34A;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.15s;
+}
+
+.btn-quitar:hover:not(:disabled) {
+  background-color: #15803D;
+}
+
+.btn-quitar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.quitado-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #16A34A;
+}
+
+.quitacao-empty {
+  text-align: center;
+  padding: 5rem 2rem;
+  color: #9CA9FF;
+}
+
+.quitacao-loading {
+  text-align: center;
+  padding: 4rem;
+  color: #9CA9FF;
+}
+
+.bloqueado-chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.625rem;
+  border-radius: 6px;
+  background-color: #FEE2E2;
+  color: #B91C1C;
+}
+
+@media (max-width: 600px) {
+  .quitacao-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
