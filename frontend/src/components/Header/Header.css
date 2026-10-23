@@ -1,0 +1,248 @@
+.header {
+  background-color: #274DEA;
+  color: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(39, 77, 234, 0.18);
+}
+
+.header__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.header__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: #ffffff;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+.header__logo {
+  width: 52px;
+  height: 38px;
+  border-radius: 8px;
+  object-fit: cover;
+  object-position: left center;
+  background: #ffffff;
+}
+
+.header__brand-name {
+  display: block;
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.header__nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.header__nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.header__nav-link.active {
+  background-color: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.header__user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: 0.5rem;
+}
+
+.header__user-info {
+  text-align: right;
+}
+
+.header__user-name {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.header__user-role {
+  display: block;
+  font-size: 0.7rem;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #CCD3FF;
+  line-height: 1.2;
+}
+
+.header__logout {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.4rem 0.75rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+
+.header__logout:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+}
+
+.header__menu-toggle,
+.header__mobile-drawer {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .header__inner {
+    height: 60px;
+    padding: 0 1rem;
+  }
+
+  .header__nav {
+    display: none;
+  }
+
+  .header__user {
+    display: none;
+  }
+
+  .header__logo {
+    width: 46px;
+    height: 34px;
+  }
+
+  .header__brand-name {
+    font-size: 0.875rem;
+  }
+
+  .header__menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+  }
+
+  .header__menu-toggle:hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  .header__mobile-drawer {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    display: none;
+    padding: 1rem;
+    background: #ffffff;
+    color: #1A1A2E;
+    border-bottom: 1px solid #E0E4FF;
+    box-shadow: 0 14px 28px rgba(26, 26, 46, 0.18);
+  }
+
+  .header__mobile-drawer.open {
+    display: block;
+  }
+
+  .header__mobile-user {
+    padding: 0.25rem 0.5rem 1rem;
+    border-bottom: 1px solid #E0E4FF;
+  }
+
+  .header__mobile-user .header__user-name {
+    color: #1A1A2E;
+    font-size: 1rem;
+  }
+
+  .header__mobile-user .header__user-role {
+    margin-top: 0.25rem;
+    color: #274DEA;
+  }
+
+  .header__mobile-nav {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.75rem 0;
+  }
+
+  .header__mobile-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 9px;
+    color: #374151;
+    text-decoration: none;
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .header__mobile-link:hover,
+  .header__mobile-link.active {
+    color: #274DEA;
+    background: #EEF1FF;
+  }
+
+  .header__mobile-logout {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid #FECACA;
+    border-radius: 9px;
+    color: #B91C1C;
+    background: #FFF7F7;
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header__nav-link,
+  .header__logout {
+    transition: none;
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "node-pg-migrate": "9.0.0",
+    "pg": "8.23.1",
+    "pg-migrate": "2.0.1"
+  }
+}

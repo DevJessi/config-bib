@@ -1,0 +1,159 @@
+name: biblioteca
+
+x-backend-image: &backend-image
+  image: ${BACKEND_IMAGE:-biblioteca-backend:local}
+
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Defina POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER:?Defina POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - database
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB" -h localhost
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    stop_grace_period: 1m
+  
+  migrate:
+    <<: *backend-image
+    build:
+      context: ./backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      DATABASE_URL: postgres://${POSTGRES_USER:-bib01}:${POSTGRES_PASSWORD:-example}@db:5432/${POSTGRES_DB:-biblioteca}
+    command: ["npm", "run", "migrations:migrate"]
+    restart: "no"
+    init: true
+    networks:
+      - database
+
+  api:
+    <<: *backend-image
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    init: true
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: ${PORT:-3000}
+      EMAIL_USUARIO: ${EMAIL_USUARIO:?Defina EMAIL_USUARIO}
+      EMAIL_SENHA: ${EMAIL_SENHA:?Defina EMAIL_SENHA}
+      DATABASE_HOST: db
+      DATABASE_PORT: "5432"
+      JWT_SECRET: ${JWT_SECRET:?Defina JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
+      BCRYPT_SALT_ROUNDS: ${BCRYPT_SALT_ROUNDS:-12}
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      DATABASE_NAME: ${POSTGRES_DB:?Defina POSTGRES_DB}
+      DATABASE_USER: ${POSTGRES_USER:?Defina POSTGRES_USER}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD}
+      DATABASE_POOL_MAX: ${DATABASE_POOL_MAX:-10}
+      SHUTDOWN_TIMEOUT_MS: ${SHUTDOWN_TIMEOUT_MS:-10000}
+      PRAZO_EMPRESTIMO_DIAS: ${PRAZO_EMPRESTIMO_DIAS:-15}
+      MULTA_POR_DIA: ${MULTA_POR_DIA:-1}
+      LIMITE_BLOQUEIO_MULTA: ${LIMITE_BLOQUEIO_MULTA:-20}
+      RESERVA_DIAS_RETIRADA: ${RESERVA_DIAS_RETIRADA:-3}
+      MAX_RENOVACOES: ${MAX_RENOVACOES:-2}
+      LEMBRETES_HORA: ${LEMBRETES_HORA:-8}
+      LEMBRETES_INTERVALO_MIN: ${LEMBRETES_INTERVALO_MIN:-15}
+    networks:
+      - edge
+      - database
+    depends_on:
+      db:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/health/live').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    stop_grace_period: 30s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    expose:
+      - "80"
+    networks:
+      - edge
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - -q
+        - --spider
+        - http://127.0.0.1/
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - edge
+    depends_on:
+      api:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - caddy
+        - validate
+        - --config
+        - /etc/caddy/Caddyfile
+        - --adapter
+        - caddyfile
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+networks:
+  edge:
+  database:
+    internal: true
+
+volumes:
+  postgres_data:
+  caddy_data:
+  caddy_config:
