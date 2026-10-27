@@ -7,7 +7,9 @@
     "start": "node main.js",
     "dev": "node --watch --env-file=../.env main.js",
     "migrations:create": "node-pg-migrate -m infra/migrations create",
-    "migrations:migrate": "node-pg-migrate -m infra/migrations up"
+    "migrations:migrate": "node-pg-migrate -m infra/migrations up",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +28,8 @@
     "pg": "8.23.1"
   },
   "devDependencies": {
-    "dotenv": "18.0.4"
+    "@vitest/coverage-v8": "5.0.5",
+    "dotenv": "18.0.4",
+    "vitest": "5.0.5"
   }
 }
