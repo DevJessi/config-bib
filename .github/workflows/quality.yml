@@ -1,6 +1,6 @@
 name: quality
 
-on
+on:
   pull_request:
     branches: []
   push:
