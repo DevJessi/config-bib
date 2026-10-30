@@ -26,7 +26,7 @@ describe('normalizarRota', () => {
     },);
 
     it('acumula contadores e renderiza texto Prometheus', () => {
-        zeraMatrics();
+        zeraMetrics();
         registrarRequest('/api/v1/liros', 'GET', 200, 12);
         registrarRequest('/api/v1/liros', 'GET', 200, 80);
         registrarErroInterno('/api/v1/livros', 'GET',);

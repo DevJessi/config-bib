@@ -27,4 +27,54 @@ export function registrarRequest(rota, method, status, ms) {
     for (const limiar of [50, 100, 250, 500, 1000, 2500, 5000]) {
         if (ms <= limiar) inc(hist.buckets, String(limiar));
     }
+    contadores.set(k, hist);
+}
+
+export function registrarErroInterno(rota, method) {
+    inc(contadores, chave('http_errors_total', rota + '|' + method));
+}
+
+function escapeLabel(valor) {
+    return String(valor).replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/"/g, '\\"');
+}
+
+export function renderizarMetrics() {
+    const linhas = [];
+
+    linhas.push('# TYPE http_requests_total Requisicaoes HTTP processadas.');
+    linhas.push('# TYPE http_requests_total counter');
+    for (const [k, v] of contadores) {
+        if (!k.startsWith('http_requests_total\u0000')) continue;
+        const [rota, method, status] = k.slice('http_requests_total'.length + 1).split('|');
+        linhas.push(
+            'http_requests_total{route="' + escapeLabel(rota) + '",method="' + escapeLabel(method) + '".status="' + escapeLabel(status) + '"} ' + v,
+        );
+    }
+
+    linhas.push('# HELP http_request_duration_ms Duracao das requisicoes em milissegundos.');
+    linhas.push('# TYPE http_request_duration_ms summary');
+    for (const [k, v] of contadores) {
+        if (!k.startsWith('http_request_duration_ms\u0000')) continue;
+        const [rota, method] = k.slice('http_request_duration_ms'.length + 1).split('|');
+        const rotulo = 'route="' + escapeLabel(rota) + '",method="' + escapeLabel(method) + '"';
+        linhas.push('http_request_duration_ms_count{' + rotulo + '} ' + v.count);
+        linhas.push('http_request_duration_ms_sum{' + rotulo + '} ' + v.sum);
+        for (const [limiar, qtd] of [...v.buckets.entries()].sort((a, b) => Number(a[0]) - Number(b[0]))) {
+            linhas.push('http_request_duration_ms_bucket{' + rotulo + ',le="' + limiar + '"} ' + qtd);
+        }
+    }
+
+    linhas.push('# HELP http_errors_total Erros internos por rota.');
+    linhas.push('# TYPE http_errors_total counter');
+    for (const [k, v] of contadores) {
+        if (!k.startsWith('http_errors_total\u0000')) continue;
+        const [rota, method] = k.slice('http_errors_total'.length + 1).split('|');
+        linhas.push('http_errors_total{route="' + escapeLabel(rota) + '", method="' + escapeLabel(method) + '"} ' + v);
+    }
+
+    return linhas.join('\n') + '\n';
+}
+
+export function zerarMetrics() {
+    contadores.clear();
 }
