@@ -47,7 +47,7 @@ export function renderizarMetrics() {
         if (!k.startsWith('http_requests_total\u0000')) continue;
         const [rota, method, status] = k.slice('http_requests_total'.length + 1).split('|');
         linhas.push(
-            'http_requests_total{route="' + escapeLabel(rota) + '",method="' + escapeLabel(method) + '".status="' + escapeLabel(status) + '"} ' + v,
+            'http_requests_total{route="' + escapeLabel(rota) + '", method="' + escapeLabel(method) + '".status="' + escapeLabel(status) + '"} ' + v,
         );
     }
 
@@ -56,7 +56,7 @@ export function renderizarMetrics() {
     for (const [k, v] of contadores) {
         if (!k.startsWith('http_request_duration_ms\u0000')) continue;
         const [rota, method] = k.slice('http_request_duration_ms'.length + 1).split('|');
-        const rotulo = 'route="' + escapeLabel(rota) + '",method="' + escapeLabel(method) + '"';
+        const rotulo = 'route="' + escapeLabel(rota) + '", method="' + escapeLabel(method) + '"';
         linhas.push('http_request_duration_ms_count{' + rotulo + '} ' + v.count);
         linhas.push('http_request_duration_ms_sum{' + rotulo + '} ' + v.sum);
         for (const [limiar, qtd] of [...v.buckets.entries()].sort((a, b) => Number(a[0]) - Number(b[0]))) {
