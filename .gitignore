@@ -4,3 +4,5 @@ node_modules/
 # Segredos: NUNCA envie para o Git (use os arquivos .env.example como modelo)
 .env
 *.log
+
+coverage/
