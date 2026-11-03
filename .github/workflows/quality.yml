@@ -57,3 +57,24 @@ jobs:
           path: frontend/coverage
           if-no-files-found: warn
           retention-days: 7
+
+  compose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run test:compose
+      - name: Validar compose.yml com Docker Compose
+        run: docker compose -f compose.yml config --quiet
+        env:
+          POSTGRES_DB: biblioteca
+          POSTGRES_USER: usuario
+          POSTGRES_PASSWORD: senha
+          JWT_SECRET: jwt-secret
+          EMAIL_USUARIO: exemplo@example.com
+          EMAIL_SENHA: senha-email
